@@ -1,0 +1,23 @@
+{
+  "name": "playwright-bdd-template",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "cucumber-js",
+    "test:web": "cucumber-js --tags '@web'",
+    "test:api": "cucumber-js --tags '@api'",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "test:headed": "PWDEBUG=1 cucumber-js --tags '@web'",
+    "report:open": "node -e \"console.log('Open reports/report.json')\""
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.0.1",
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.21",
+    "allure": "^3.3.1",
+    "allure-cucumberjs": "^3.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
