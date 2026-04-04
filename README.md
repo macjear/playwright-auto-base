@@ -1,4 +1,4 @@
-# Playwright + Cucumnber BDD - Test Automation Suite
+# Playwright + Cucumber BDD - Test Automation Suite
 
 Base test automation framework written in TypeScript for testing the CURA Healthcare website.
 
@@ -57,9 +57,6 @@ npm test -- --tags "@web"
 
 # Run only API tests
 npm test -- --tags "@api"
-
-# Run specific feature
-npm test -- --grep "login"
 
 ```
 
