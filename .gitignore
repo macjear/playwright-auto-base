@@ -3,4 +3,5 @@ allure-results/
 allure-report/
 reports/
 .env
+.vscode/
 *.log

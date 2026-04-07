@@ -1,85 +1,177 @@
 # Playwright + Cucumber BDD - Test Automation Suite
 
-Base test automation framework written in TypeScript for testing the CURA Healthcare website.
+> Base test automation framework written in TypeScript for testing the CURA Healthcare website.
 
-**Demo Application:** https://katalon-demo-cura.herokuapp.com/
+**App Link:** https://katalon-demo-cura.herokuapp.com/
 
-## Sample Report
+---
 
-![allure_report_summary](/src/resources/image.png)
+## Sample Test Report
+
+![Allure Report Summary](/resources/image.png)
+
+---
+
+## Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| [Playwright](https://playwright.dev/) | Browser automation |
+| [Cucumber](https://cucumber.io/) | BDD / Gherkin scenarios |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe test code |
+| [Allure](https://allurereport.org/) | HTML test reporting |
+| [pg](https://node-postgres.com/) | PostgreSQL client |
+| [oracledb](https://oracle.github.io/node-oracledb/) | Oracle DB client |
+| [AWS SDK v3](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/) | S3 & DynamoDB clients |
+
+---
+
+## Quick Start
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Install browsers
+npx playwright install
+
+# 3. Set up environment variables
+cp .env.example .env   # then fill in your values
+
+# 4. Run tests
+npm test
+```
+
+> Requires **Node.js 18+** and **Allure CLI** (`npm i -g allure-commandline`)
+
+---
+
+## Running Tests
+
+```bash
+npm test                # all tests
+npm run test:web        # @web scenarios
+npm run test:api        # @api scenarios
+npm run test:smoke      # @smoke scenarios
+npm run test:headed     # visible browser
+npm run test:ci         # headless + retries (for CI)
+```
+
+---
+
+## Allure Reports
+
+```bash
+npm run allure:generate   # build report from results
+npm run allure:open       # open static report
+npm run allure:serve      # serve live report in browser
+```
+
+---
 
 ## Project Structure
 
 ```
 src/
-  features/
-    web/
-      login.feature              # Login test scenarios
-      createAppointment.feature  # Appointment creation scenarios
-    api/
-      users.feature             # API test scenarios
-  pages/
-    login.page.ts               # Login page object model
-    appointment.page.ts         # Appointment page object model
-  steps/
-    web/
-      login.steps.ts            # Login step definitions
-      createAppointment.steps.ts # Appointment step definitions
-    api/
-      users.steps.ts            # API step definitions
-  support/
-    hooks.ts                    # Test lifecycle hooks (before/after scenarios)
-    world.ts                    # Cucumber world configuration
-cucumber.js                     # Cucumber configuration
-playwright.config.ts            # Playwright configuration
-package.json                    # Project dependencies
-tsconfig.json                   # TypeScript configuration
+├── features/        # Gherkin .feature files (web/ + api/)
+├── steps/           # Step definitions (web/ + api/)
+├── pages/           # Page Object Model
+├── components/      # Reusable UI components
+├── support/         # Hooks & Cucumber World
+├── models/          # Request/response interfaces
+├── utils/           # Helpers (S3, Excel, file, JSON)
+├── db/              # DB connections (Postgres, Oracle, DynamoDB, S3)
+├── constants/       # App-wide constants
+└── data/            # External test data files
 ```
 
-## Installation
+---
 
-```bash
-# Install dependencies
-npm install
+## Environment Variables
 
-# Install Playwright browsers
-npx playwright install
+Create a `.env` file at the project root. **Never commit it.**
+
+### General
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BASE_URL` | `https://katalon-demo-cura.herokuapp.com` | App under test |
+| `CI` | `false` | Headless mode + retries |
+
+### PostgreSQL
+
+| Variable | Description |
+|----------|-------------|
+| `DG_POSTGRE_DB_URL` | Connection string |
+| `DG_POSTGRE_DB_USER` | Username |
+| `DG_POSTGRE_DB_PASSWORD` | Password |
+
+### Oracle
+
+| Variable | Description |
+|----------|-------------|
+| `DG_ORACLE_DB_URL` | Connect string (`host:port/service`) |
+| `DG_ORACLE_DB_USER` | Username |
+| `DG_ORACLE_DB_PASSWORD` | Password |
+
+### AWS (S3 / DynamoDB)
+
+| Variable | Description |
+|----------|-------------|
+| `AWS_AC_REGION` | AWS region (e.g. `us-east-1`) |
+| `AWS_LOGIN_TYPE` | `role` for STS assumption, otherwise default chain |
+| `AWS_ACCOUNT_ID` | AWS account ID |
+| `AWS_CURRENT_ROLE` | IAM role name (when `AWS_LOGIN_TYPE=role`) |
+| `AWS_SESSION_NAME` | STS session name (when `AWS_LOGIN_TYPE=role`) |
+| `DYNAMODB_AC_ENDPOINT` | DynamoDB endpoint URL |
+
+---
+
+## Writing a Test
+
+**1. Feature file** — `src/features/web/myFeature.feature`
+```gherkin
+@web
+Feature: My Feature
+
+  Scenario: Example scenario
+    Given I open the login page
+    When I login with "John Doe" and "password"
+    Then I should see the appointment page
 ```
 
-## Running Tests
+**2. Step definitions** — `src/steps/web/myFeature.steps.ts`
+```typescript
+import { Given, When, Then } from '@cucumber/cucumber';
+import { CustomWorld } from '../../support/world';
 
-```bash
-# Run all tests
-npm test
-
-# Run only web tests
-npm test -- --tags "@web"
-
-# Run only API tests
-npm test -- --tags "@api"
-
+Given('I open the login page', async function (this: CustomWorld) {
+  await this.loginPage.navigate();
+});
 ```
 
-## Tech Stack
+**3. Page Object** — `src/pages/login.page.ts`
+```typescript
+import { BasePage } from './base.page';
 
-- **Playwright** - Web browser automation
-- **Cucumber** - BDD test framework
-- **TypeScript** - Type-safe code
-- **Allure** - Test reporting 
-- **Node.js** - Runtime environment
+export class LoginPage extends BasePage {
+  readonly usernameInput = this.page.getByTestId('txt-username');
+  readonly passwordInput = this.page.getByTestId('txt-password');
+  readonly loginButton   = this.page.getByTestId('btn-login');
+}
+```
 
-## Test Execution Notes
+---
 
-- `@web` scenarios launch a browser in headed or headless mode (configured in playwright.config.ts)
-- `@api` scenarios create a Playwright API request context
-- Tests run sequentially by default
-- Each scenario gets a fresh browser context for isolation
-- Test results are captured before each scenario runs
+## Key Features
 
-## Dependencies
-
-Key packages:
-- `@playwright/test` - Playwright testing library
-- `@cucumber/cucumber` - Cucumber BDD framework
-- `typescript` - TypeScript compiler
-- `ts-node` - TypeScript execution (for Node.js)
+- **BDD with Gherkin** — Human-readable `.feature` files using Given/When/Then syntax
+- **Page Object Model (POM)** — Encapsulated page interactions in typed Page classes
+- **Component Object Model (COM)** — Reusable UI components shared across pages
+- **Multi-browser** — Chromium, Firefox, and WebKit (Safari) via Playwright projects
+- **Web & API testing** — UI and API test scenarios in a single framework
+- **Database support** — Built-in helpers for PostgreSQL, Oracle, DynamoDB, and S3
+- **Allure reporting** — Step-level detail, test history, retries, and failure attachments
+- **Tagged execution** — Run subsets with `@smoke`, `@web`, `@api`, or any custom tag
+- **Failure artifacts** — Screenshots and video automatically captured on failure
+- **CI-ready** — Headless mode, auto-retry, and `cross-env` for cross-platform env vars

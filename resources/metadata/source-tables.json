@@ -1,0 +1,23 @@
+{
+  "sourceTables": [
+    {
+      "name": "appointments",
+      "description": "CURA Healthcare appointment records",
+      "columns": [
+        { "name": "facility",             "type": "varchar(100)", "nullable": false },
+        { "name": "hospital_readmission", "type": "boolean",      "nullable": false },
+        { "name": "healthcare_program",   "type": "varchar(50)",  "nullable": false },
+        { "name": "visit_date",           "type": "date",         "nullable": false },
+        { "name": "comment",              "type": "text",         "nullable": true  }
+      ]
+    },
+    {
+      "name": "users",
+      "description": "Application users",
+      "columns": [
+        { "name": "username", "type": "varchar(100)", "nullable": false },
+        { "name": "password", "type": "varchar(255)", "nullable": false }
+      ]
+    }
+  ]
+}

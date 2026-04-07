@@ -1,0 +1,16 @@
+{
+  "validUser": {
+    "username": "John Doe",
+    "password": "ThisIsNotAPassword"
+  },
+  "invalidUser": {
+    "username": "Jane Doe",
+    "password": "InvalidPassword"
+  },
+  "roles": {
+    "admin": {
+      "username": "admin",
+      "password": "admin"
+    }
+  }
+}

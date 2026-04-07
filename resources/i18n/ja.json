@@ -1,0 +1,14 @@
+{
+  "errors": {
+    "loginFailed": "ログインに失敗しました！ユーザー名とパスワードが正しいことを確認してください。",
+    "requiredField": "このフィールドを入力してください。",
+    "invalidDate": "予約の有効な日付を入力してください。"
+  },
+  "confirmation": {
+    "heading": "予約確認"
+  },
+  "nav": {
+    "logout": "サインアウト",
+    "goHome": "ホームページへ"
+  }
+}

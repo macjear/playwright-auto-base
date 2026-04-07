@@ -1,0 +1,22 @@
+{
+  "facilities": [
+    "Hongkong CURA Healthcare Center",
+    "Seoul CURA Healthcare Center",
+    "Tokyo CURA Healthcare Center"
+  ],
+  "healthcarePrograms": ["Medicaid", "Medicare", "None"],
+  "validAppointment": {
+    "facility": "Tokyo CURA Healthcare Center",
+    "hospitalReadmission": true,
+    "healthcareProgram": "Medicaid",
+    "visitDate": "07/01/2026",
+    "comment": "Looking forward to my appointment!"
+  },
+  "appointmentMissingDate": {
+    "facility": "Tokyo CURA Healthcare Center",
+    "hospitalReadmission": true,
+    "healthcareProgram": "Medicaid",
+    "visitDate": "",
+    "comment": ""
+  }
+}

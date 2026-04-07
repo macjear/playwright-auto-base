@@ -1,23 +1,37 @@
 {
-  "name": "playwright-bdd-template",
+  "name": "playwright-bdd-auto",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "test": "cucumber-js",
-    "test:web": "cucumber-js --tags '@web'",
-    "test:api": "cucumber-js --tags '@api'",
-    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "test:smoke": "cucumber-js --profile smoke",
+    "test:ci": "cross-env CI=true cucumber-js --profile ci",
+    "test:web": "cucumber-js --tags @web",
+    "test:api": "cucumber-js --tags @api",
+    "test:headed": "cucumber-js --tags @web",
+    "clean": "rm -rf allure-results playwright-report",
+    "allure:generate": "allure generate /allure-results -o allure-report",
     "allure:open": "allure open allure-report",
-    "test:headed": "PWDEBUG=1 cucumber-js --tags '@web'",
-    "report:open": "node -e \"console.log('Open reports/report.json')\""
+    "allure:serve": "allure serve /allure-results"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.1",
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.19.17",
+    "@types/oracledb": "^6.10.2",
     "allure": "^3.3.1",
     "allure-cucumberjs": "^3.6.0",
+    "cross-env": "^10.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1025.0",
+    "@aws-sdk/client-s3": "^3.1025.0",
+    "@aws-sdk/credential-providers": "^3.1025.0",
+    "@aws-sdk/lib-dynamodb": "^3.1025.0",
+    "@types/pg": "^8.20.0",
+    "oracledb": "^6.10.0",
+    "pg": "^8.20.0"
   }
 }

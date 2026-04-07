@@ -1,0 +1,14 @@
+{
+  "errors": {
+    "loginFailed": "Login failed! Please ensure the username and password are valid.",
+    "requiredField": "Please fill out this field.",
+    "invalidDate": "Please enter a valid date for your appointment."
+  },
+  "confirmation": {
+    "heading": "Appointment Confirmation"
+  },
+  "nav": {
+    "logout": "Sign Out",
+    "goHome": "Go to Homepage"
+  }
+}
